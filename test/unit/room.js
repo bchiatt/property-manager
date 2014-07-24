@@ -30,7 +30,7 @@ describe('Room', function(){
     it('should calculate the cost to rent a room', function(){
       var bedroom = new Room('Bed', '8', '11');
 
-      expect(bedroom.cost()).to.equal(440.00);
+      expect(bedroom.cost()).to.equal(440);
     });
   });
 });
