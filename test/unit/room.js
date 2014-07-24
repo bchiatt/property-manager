@@ -22,9 +22,15 @@ describe('Room', function(){
     it('should calculate the area of a room', function(){
       var bedroom = new Room('Bed', '8', '11');
 
-      bedroom.area();
-
       expect(bedroom.area()).to.equal(88);
+    });
+  });
+
+  describe('#cost', function(){
+    it('should calculate the cost to rent a room', function(){
+      var bedroom = new Room('Bed', '8', '11');
+
+      expect(bedroom.cost()).to.equal(440);
     });
   });
 });
