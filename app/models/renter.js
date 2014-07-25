@@ -27,10 +27,14 @@ Renter.prototype.work = function(){
 };
 
 Renter.prototype.payRent = function(payment){
-  this._cash -= parseInt(payment);
-  if (this._cash < 0){
-    this._isEvicted = true;
-    this._cash = 0;
+  if(this._isEvicted){return;}
+
+  parseInt(payment);
+
+  this._isEvicted = this._cash < payment;
+
+  if(!this._isEvicted){
+  this._cash -= payment;
   }
 };
 

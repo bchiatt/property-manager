@@ -35,4 +35,25 @@ Apartment.prototype.bedrooms = function(){
   return count;
 };
 
+Apartment.prototype.isAvailable = function(){
+  var count = this.bedrooms() - this.renters.length;
+  if (count > 0){
+    return true;
+  }else{
+    return false;
+  }
+};
+
+Apartment.prototype.purgeEvicted = function(){
+  for(var i = 0; i < this.renters.length; i++){
+    if(this.renters[i]._isEvicted === true){
+      this.renters.splice(i, 1);
+    }
+  }
+};
+
+Apartment.prototype.collectRent = function(){
+  
+};
+
 module.exports = Apartment;
