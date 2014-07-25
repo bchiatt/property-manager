@@ -91,45 +91,78 @@ Apartment.deleteById = function(query, cb){
   });
 };
 
-var _apartment = function(apts){
+var convertApartment = function(apts){
   for(var i = 0; i < apts.length; i++){
     apts[i] = _.create(Apartment.prototype, apts[i]);
-  }
-};
+
+    apts[i].rooms[0] = _.create(Room.prototype, apts[i].rooms[0]);
+
+    for(var x = 0; x < apts[i].rooms.length; x++){
+      apts[i].rooms[x] = _.create(Room.prototype, apts[i].rooms[x]);
+    }
   
-var _rooms = function(apts){
-  var rooms = apts.rooms;
-  for(var i = 0; i < rooms.length; i++){
-    rooms[i] = _.create(Room.prototype, rooms[i]);
+    for(var z = 0; z < apts[i].renters.length; z++){
+      apts[i].renters[z] = _.create(Renter.prototype, apts[i].renters[z]);
+    }
   }
 };
-
-var _renters = function(apts){
-  var renters = apts.renters;
-  for(var i = 0; i < renters.length; i++){
-    renters[i] = _.create(Renter.prototype, renters[i]);
-  }
-};
-
+ 
 Apartment.area = function(cb){
   var area = 0;
   Apartment.find({}, function(apts){
-    console.log(apts);
-    _apartment(apts);
-    _rooms(apts);
-    _renters(apts);
-
-    console.log(apts);
+    convertApartment(apts);
 
     for(var i = 0; i < apts.length; i++){
-      for(var x = 0; i < apts.rooms; i++){
-        area += apts[i].rooms[x].area();
+      for(var j = 0; j < apts[i].rooms.length; j++){
+        area += apts[i].rooms[j].area();
       }
     }
+    cb(area);
   });
-
-  cb(area);
 };
 
+Apartment.cost = function(cb){
+  var cost = 0;
+  Apartment.find({}, function(apts){
+    convertApartment(apts);
+
+    for(var i = 0; i < apts.length; i++){
+      for(var j = 0; j < apts[i].rooms.length; j++){
+        cost += apts[i].rooms[j].cost();
+      }
+    }
+    cb(cost);
+  });
+};
+
+Apartment.tenets = function(cb){
+  var tenets = 0;
+  Apartment.find({}, function(apts){
+    convertApartment(apts);
+
+    for(var i = 0; i < apts.length; i++){
+      tenets += apts[i].renters.length;
+    }
+
+    cb(tenets);
+  });
+};
+
+Apartment.revenue = function(cb){
+  var revenue = 0;
+  Apartment.find({}, function(apts){
+    convertApartment(apts);
+
+    for(var i = 0; i < apts.length; i++){
+      if(apts[i].renters.length > 0){
+        for(var j = 0; j < apts[i].rooms.length; j++){
+          revenue += apts[i].rooms[j].cost();
+        }
+      }
+    }
+
+    cb(revenue);
+  });
+};
 
 module.exports = Apartment;

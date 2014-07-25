@@ -129,7 +129,7 @@ describe('Apartment', function(){
     });
   });
 
-  describe('deleteById', function(){
+  describe('.deleteById', function(){
     it('should delete a specific apt by it\'s id', function(done){
       a1.save(function(){
         a2.save(function(){
@@ -145,13 +145,12 @@ describe('Apartment', function(){
     });
   });
 
-  describe('area', function(){
+  describe('.area', function(){
     it('should calculate the area of the apt complex ', function(done){
       a1.save(function(){
         a2.save(function(){
           Apartment.area(function(value){
             expect(value).to.equal(1399);
-
             done();
           });
         });
@@ -159,24 +158,44 @@ describe('Apartment', function(){
     });
   });
 
-  describe('cost', function(){
+  describe('.cost', function(){
     it('should return the total cost of the apt complex', function(done){
-
-      done();
+      a1.save(function(){
+        a2.save(function(){
+          Apartment.cost(function(value){
+            expect(value).to.equal(6995);
+            done();
+          });
+        });
+      });
     });
   });
 
-  describe('tenets', function(){
+  describe('.tenets', function(){
     it('should return the number of tenets in the apt complex', function(done){
-
-      done();
+      a1.save(function(){
+        a2.save(function(){
+          Apartment.tenets(function(value){
+            expect(value).to.equal(3);
+            done();
+          });
+        });
+      });
     });
   });
 
-  describe('revenue', function(){
+  describe('.revenue', function(){
     it('should return the revenue for any apt that has a renter', function(done){
-
-      done();
+      a1.save(function(){
+        a2.save(function(){
+          a3.save(function(){
+            Apartment.revenue(function(value){
+              expect(value).to.equal(6995);
+              done();
+            });
+          });
+        });
+      });
     });
   });
 });
