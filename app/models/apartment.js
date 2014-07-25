@@ -116,7 +116,9 @@ Apartment.area = function(cb){
   Apartment.find({}, function(apts){
     console.log(apts);
     _apartment(apts);
+    console.log(apts);
     _rooms(apts);
+    console.log(apts);
     _renters(apts);
 
     console.log(apts);
