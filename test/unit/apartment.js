@@ -147,8 +147,15 @@ describe('Apartment', function(){
 
   describe('area', function(){
     it('should calculate the area of the apt complex ', function(done){
+      a1.save(function(){
+        a2.save(function(){
+          Apartment.area(function(value){
+            expect(value).to.equal(1399);
 
-      done();
+            done();
+          });
+        });
+      });
     });
   });
 
