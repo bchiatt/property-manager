@@ -9,13 +9,14 @@ var Mongo = require('mongodb');
 var Room = require('../../app/models/room.js');
 var Renter = require('../../app/models/renter.js');
 var Apartment;
-//a = apartment, rm = room, t = tenet/renter
+var cApt;
 var a1, a2, a3;
 
 describe('Apartment', function(){
   before(function(done){
     connect('property-manager-test', function(){
       Apartment = require('../../app/models/apartment.js');
+      cApt = global.mongodb.collection('apartments');
       done();
     });
   });
@@ -80,59 +81,93 @@ describe('Apartment', function(){
   });
 
   describe('#collectRent', function(){
-    it('should ', function(){
+    it('should calculate payment amount and subtract from renters ', function(){
+      a2.renters[0]._cash = 2000;
+      a1.renters[0]._cash = 2000;
+      a1.renters[1]._cash = 2000;
+      a1.collectRent();
+      a2.collectRent();
+      expect(a2.renters).to.have.length(0);
+      expect(a1.renters).to.have.length(2);
+      expect(a1.renters[0]._cash).to.equal(352.50);
     });
   });
 
   describe('#save', function(){
-    it('should ', function(){
+    it('should save apartment to mongodb collection', function(done){
+      a1.save(function(){
+        expect(a1._id).to.be.instanceof(Mongo.ObjectID);
+        done();
+      });
     });
   });
 
   describe('.find', function(){
-    it('should ', function(done){
-
-      done();
+    it('should find all the apartments', function(done){
+      a1.save(function(){
+        a2.save(function(){
+          Apartment.find({}, function(apts){
+            expect(apts).to.have.length(2);
+            done();
+          });
+        });
+      });
     });
   });
 
   describe('.findById', function(){
-    it('should ', function(done){
-
-      done();
+    it('should find specific item by mongo ID', function(done){
+      a1.save(function(){
+        a2.save(function(){
+          Apartment.findById(a1._id, function(apt){
+            expect(apt).to.be.instanceof(Apartment);
+            expect(apt.unit).to.equal('A1');
+            done();
+          });
+        });
+      });
     });
   });
 
   describe('deleteById', function(){
-    it('should ', function(done){
-
-      done();
+    it('should delete a specific apt by it\'s id', function(done){
+      a1.save(function(){
+        a2.save(function(){
+          Apartment.deleteById(a1._id, function(){
+            Apartment.find({}, function(apts){
+              expect(apts).to.have.length(1);
+              expect(apts[0].unit).to.equal('A2');
+              done();
+            });
+          });
+        });
+      });
     });
   });
 
   describe('area', function(){
-    it('should ', function(done){
+    it('should calculate the area of the apt complex ', function(done){
 
       done();
     });
   });
 
   describe('cost', function(){
-    it('should ', function(done){
+    it('should return the total cost of the apt complex', function(done){
 
       done();
     });
   });
 
   describe('tenets', function(){
-    it('should ', function(done){
+    it('should return the number of tenets in the apt complex', function(done){
 
       done();
     });
   });
 
   describe('revenue', function(){
-    it('should ', function(done){
+    it('should return the revenue for any apt that has a renter', function(done){
 
       done();
     });

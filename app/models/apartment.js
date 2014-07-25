@@ -53,7 +53,40 @@ Apartment.prototype.purgeEvicted = function(){
 };
 
 Apartment.prototype.collectRent = function(){
+  var payment = this.cost()/this.renters.length;
   
+  for(var i = 0; i < this.renters.length; i++){
+    this.renters[i].payRent(payment);
+  }
+
+  this.purgeEvicted();
+};
+
+Apartment.prototype.save = function(cb){
+  cApt.save(this, function(err, obj){
+    cb();
+  });
+};
+
+Apartment.find = function(query, cb){
+  cApt.find(query).toArray(function(err, apts){
+    cb(apts);
+  });
+};
+
+Apartment.findById = function(query, cb){
+  query = {_id:query};
+  cApt.findOne(query, function(err, apt){
+    apt = _.create(Apartment.prototype, apt);
+    cb(apt);
+  });
+};
+
+Apartment.deleteById = function(query, cb){
+  query = {_id:query};
+  cApt.remove(query, function(){
+    cb();
+  });
 };
 
 module.exports = Apartment;
