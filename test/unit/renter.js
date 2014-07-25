@@ -50,7 +50,7 @@ describe('Renter', function(){
 
       sue.payRent('550');
 
-      expect(sue._cash).to.equal(0);
+      expect(sue._cash).to.equal(500);
       expect(sue._isEvicted).to.equal(true);
     });
   });
