@@ -43,7 +43,6 @@ Renter.prototype.party = function(){
 
   var intensity = Math.floor(Math.random()*10)+1;
   if (intensity > 8){
-    console.log('you are a terrible person');
     this._isEvicted = true;
   }
 };
