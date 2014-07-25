@@ -1,6 +1,8 @@
 'use strict';
 
 var cApt = global.mongodb.collection('apartments');
+var Renter = require('./renter.js');
+var Room = require('./room.js');
 var _ = require('lodash');
 
 function Apartment(unit){
@@ -88,5 +90,46 @@ Apartment.deleteById = function(query, cb){
     cb();
   });
 };
+
+var _apartment = function(apts){
+  for(var i = 0; i < apts.length; i++){
+    apts[i] = _.create(Apartment.prototype, apts[i]);
+  }
+};
+  
+var _rooms = function(apts){
+  var rooms = apts.rooms;
+  for(var i = 0; i < rooms.length; i++){
+    rooms[i] = _.create(Room.prototype, rooms[i]);
+  }
+};
+
+var _renters = function(apts){
+  var renters = apts.renters;
+  for(var i = 0; i < renters.length; i++){
+    renters[i] = _.create(Renter.prototype, renters[i]);
+  }
+};
+
+Apartment.area = function(cb){
+  var area = 0;
+  Apartment.find({}, function(apts){
+    console.log(apts);
+    _apartment(apts);
+    _rooms(apts);
+    _renters(apts);
+
+    console.log(apts);
+
+    for(var i = 0; i < apts.length; i++){
+      for(var x = 0; i < apts.rooms; i++){
+        area += apts[i].rooms[x].area();
+      }
+    }
+  });
+
+  cb(area);
+};
+
 
 module.exports = Apartment;
